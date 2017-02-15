@@ -18,7 +18,7 @@ if let enumerator = FileManager.default.enumerator(atPath: env) {
             let file = env + "/" + file
             do {
                 let contents = try String(contentsOfFile: file)
-                let newContents = contents.replacingOccurrences(of: from, with: to)
+                let newContents = contents.replacingOccurrences(of: from, with: to).replacingOccurrences(of: from.lowercased() + "_", with: to.lowercased() + "_")
                 let fileName = URL(fileURLWithPath: file).lastPathComponent
                 if fileName.hasPrefix(from) {
                     try FileManager.default.removeItem(atPath: file)
