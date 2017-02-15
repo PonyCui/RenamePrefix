@@ -14,7 +14,7 @@ let to = ProcessInfo().arguments[2]
 
 if let enumerator = FileManager.default.enumerator(atPath: env) {
     for file in enumerator {
-        if let file = file as? String, (file.hasSuffix(".h") || file.hasSuffix(".m") || file.hasSuffix(".pbxproj")) {
+        if let file = file as? String, (file.hasSuffix(".h") || file.hasSuffix(".m") || file.hasSuffix(".pbxproj") || file.hasSuffix(".xib")) {
             let file = env + "/" + file
             do {
                 let contents = try String(contentsOfFile: file)
@@ -37,6 +37,22 @@ if let enumerator = FileManager.default.enumerator(atPath: env) {
                 }
             }
             catch {
+                continue
+            }
+        }
+        else if let file = file as? String {
+            let file = env + "/" + file
+            do {
+                let fileName = URL(fileURLWithPath: file).lastPathComponent
+                if fileName.hasPrefix(from) {
+                    try FileManager.default.copyItem(atPath: file, toPath: file.replacingOccurrences(of: from, with: to))
+                    try FileManager.default.removeItem(atPath: file)
+                }
+                if fileName.contains("+" + from) {
+                    try FileManager.default.copyItem(atPath: file, toPath: file.replacingOccurrences(of: from, with: to))
+                    try FileManager.default.removeItem(atPath: file)
+                }
+            } catch {
                 continue
             }
         }
