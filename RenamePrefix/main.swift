@@ -26,6 +26,12 @@ if let enumerator = FileManager.default.enumerator(atPath: env) {
                                           atomically: true,
                                           encoding: String.Encoding.utf8)
                 }
+                if fileName.contains("+" + from) {
+                    try FileManager.default.removeItem(atPath: file)
+                    try newContents.write(toFile: file.replacingOccurrences(of: "+" + from, with: "+" + to),
+                                          atomically: true,
+                                          encoding: String.Encoding.utf8)
+                }
                 else {
                     try newContents.write(toFile: file, atomically: true, encoding: String.Encoding.utf8)
                 }
